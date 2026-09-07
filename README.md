@@ -1,16 +1,14 @@
 # DL- Developing a Recurrent Neural Network Model for Stock Prediction
-
+# NAME: RAKSHITHA K
+# REGISTER NUMBER: 212223110039
 ## AIM
 To develop a Recurrent Neural Network (RNN) model for predicting stock prices using historical closing price data.
 
-## Problem Statement and Dataset
-Stock price prediction is an important task in financial analysis where future prices are estimated based on historical data. The objective of this project is to develop a Recurrent Neural Network (RNN) model using historical closing price data to capture temporal patterns and predict future stock prices, and to evaluate the model’s performance using appropriate metrics.
+## THEORY
 
-### train dataset
-<img width="665" height="615" alt="image" src="https://github.com/user-attachments/assets/7f988cd6-7ba0-4113-a769-008f848b5ab4" />
 
-### test dataset
-<img width="581" height="675" alt="image" src="https://github.com/user-attachments/assets/1ce32ae1-be03-4410-9287-d6129a2776d5" />
+## Neural Network Model
+Include the neural network model diagram.
 
 ## DESIGN STEPS
 ### STEP 1: 
@@ -23,7 +21,7 @@ Convert data to tensors and set up DataLoader.
 
 ### STEP 3: 
 
-Define the RNN model architecture
+Define the RNN model architecture.
 
 ### STEP 4: 
 
@@ -44,6 +42,7 @@ Predict on test data, plot actual vs. predicted prices.
 
 
 ```python
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -54,10 +53,8 @@ from torch.utils.data import DataLoader, TensorDataset
 
 ## Step 1: Load and Preprocess Data
 # Load training and test datasets
-df_train = pd.read_csv('/content/trainset.csv')
-df_test = pd.read_csv('/content/testset.csv')
-
-df_train.head()
+df_train = pd.read_csv('trainset.csv')
+df_test = pd.read_csv('testset.csv')
 
 # Use closing prices
 train_prices = df_train['Close'].values.reshape(-1, 1)
@@ -80,7 +77,6 @@ def create_sequences(data, seq_length):
 seq_length = 60
 x_train, y_train = create_sequences(scaled_train, seq_length)
 x_test, y_test = create_sequences(scaled_test, seq_length)
-
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
 # Convert to PyTorch tensors
@@ -95,14 +91,14 @@ train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 
 ## Step 2: Define RNN Model
 class RNNModel(nn.Module):
-  def __init__(self,input_size=1,hidden_size=64,num_layers=2,output_size=1):
-    super(RNNModel,self).__init__()
-    self.rnn=nn.RNN(input_size,hidden_size,num_layers,batch_first=True)
-    self.fc=nn.Linear(hidden_size,output_size)
-  def forward(self,x):
-    out,_=self.rnn(x)
-    out=self.fc(out[:,-1,:])
-    return out
+    def __init__(self, input_size=1,hidden_size=64,num_layers=2,output_size=1):
+        super(RNNModel, self).__init__()
+        self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc  = nn.Linear(hidden_size,output_size)
+    def forward(self, x):
+        out,_=self.rnn(x)
+        out=self.fc(out[:,-1,:])
+        return out
 
 model = RNNModel()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -115,34 +111,37 @@ from torchinfo import summary
 # input_size = (batch_size, seq_len, input_size)
 summary(model, input_size=(64, 60, 1))
 
-criterion =nn.MSELoss()
-optimizer =torch.optim.Adam(model.parameters(),lr=0.001)
+criterion = nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 ## Step 3: Train the Model
+
+
 def train_model(model, train_loader, criterion, optimizer, epochs=20):
     train_losses = []
     model.train()
     for epoch in range(epochs):
-      total_loss=0
-      for x_batch,y_batch in train_loader:
-        x_batch,y_batch=x_batch.to(device),y_batch.to(device)
-        optimizer.zero_grad()
-        outputs=model(x_batch)
-        loss=criterion(outputs,y_batch)
-        loss.backward()
-        optimizer.step()
-        total_loss+=loss.item()
-      train_losses.append(total_loss/len(train_loader))
-      print(f'Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(train_loader):.4f}')
-      # Plot training loss
+        total_loss = 0
+        for x_batch, y_batch in train_loader:
+            x_batch, y_batch =x_batch.to(device),y_batch.to(device)
+            optimizer.zero_grad()
+            outputs = model(x_batch)
+            loss = criterion(outputs, y_batch)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+        train_losses.append(total_loss / len(train_loader))
+        print(f"Epoch [{epoch+1}/{epochs}], Loss: {total_loss / len(train_loader):.4f}")
+# Plot training loss
+    print('Name: Sharan Kumar G')
+    print('Register Number: 212224230260')
     plt.plot(train_losses, label='Training Loss')
     plt.xlabel('Epoch')
     plt.ylabel('MSE Loss')
     plt.title('Training Loss Over Epochs')
-    print('Name:R Raihaan Ahmed')
-    print('Register Number:212224040260')
     plt.legend()
     plt.show()
+train_model(model,train_loader,criterion,optimizer)
 
 ## Step 4: Make Predictions on Test Set
 model.eval()
@@ -155,8 +154,8 @@ predicted_prices = scaler.inverse_transform(predicted)
 actual_prices = scaler.inverse_transform(actual)
 
 # Plot the predictions vs actual prices
-print('Name:R Raihaan Ahmed')
-print('Register Number:212224040260')
+print('Name: Sharan Kumar G')
+print('Register Number: 212224230260')
 plt.figure(figsize=(10, 6))
 plt.plot(actual_prices, label='Actual Price')
 plt.plot(predicted_prices, label='Predicted Price')
@@ -167,22 +166,33 @@ plt.legend()
 plt.show()
 print(f'Predicted Price: {predicted_prices[-1]}')
 print(f'Actual Price: {actual_prices[-1]}')
+
+
+
+
+
 ```
 
 ### OUTPUT
 
 ## Training Loss Over Epochs Plot
-<img width="263" height="383" alt="image" src="https://github.com/user-attachments/assets/4bb8b3db-1bd5-412d-93d3-c36701e4a9aa" />
+
+<img width="1047" height="656" alt="image" src="https://github.com/user-attachments/assets/04218b4b-a14a-465f-90de-79e5f775345b" />
+
+
 
 
 ## True Stock Price, Predicted Stock Price vs time
-<img width="624" height="499" alt="image" src="https://github.com/user-attachments/assets/f43056f5-052f-44e0-a09c-2207ab02d931" />
+
+
+<img width="1255" height="795" alt="image" src="https://github.com/user-attachments/assets/4a18ad6d-58f2-4c80-b17a-b8f2614ba149" />
 
 
 ### Predictions
-<img width="767" height="564" alt="image" src="https://github.com/user-attachments/assets/0d28eb1e-e2a0-42bf-b181-3b2d0176fb28" />
 
+
+<img width="277" height="50" alt="image" src="https://github.com/user-attachments/assets/cf0743f2-ea0f-47ee-b9a5-5890120c7c91" />
 
 
 ## RESULT
-Include your result here
+Thus, a Recurrent Neural Network (RNN) model for predicting stock prices using historical closing price data has been developed successfully.
