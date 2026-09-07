@@ -41,9 +41,7 @@ Predict on test data, plot actual vs. predicted prices.
 
 ## PROGRAM
 
-### Name: R Raihaan Ahmed 
 
-### Register Number: 212224040260
 
 ```python
 import numpy as np
